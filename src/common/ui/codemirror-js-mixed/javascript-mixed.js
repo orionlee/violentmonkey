@@ -54,7 +54,7 @@
     }
 
     function prepReparseStringTemplateInLocalMode(modeToUse, stream, state) {
-      dbg(`Entering local ${modeToUse.name} mode...`);
+      // ---dbg(`Entering local ${modeToUse.name} mode...`);
       // spit out beginning backtick as a token, and leave the rest of the text for local mode parsing
       stream.backUp(tokenLength(stream) - 1);
 
@@ -68,20 +68,20 @@
     }
 
     function exitLocalModeWithEndBacktick(stream, state) {
-      dbg('Exiting local html/css mode...');
+      // ---dbg('Exiting local html/css mode...');
       // parse the ending JS string template backtick in js mode
       return jsMode.token(stream, state.jsState);
     }
 
     function tokenInLocalMode(stream, state) {
       const style = state.localMode.token(stream, state.localState);
-      dbg('  local mode token - ', stream.current(), `[${style}]`);
+      // ---dbg('  local mode token - ', stream.current(), `[${style}]`);
       return style;
     }
 
     function prepReparsePlainStringInLocalMode(modeToUse, stream, state) {
-      dbg(`Entering local ${modeToUse.name} mode... (plain string)`);
-      // dbg(`    ${stream.start}-${stream.pos}:\t${stream.current()}`);
+      // ---dbg(`Entering local ${modeToUse.name} mode... (plain string)`);
+      // // ---dbg(`    ${stream.start}-${stream.pos}:\t${stream.current()}`);
       const oldPos = stream.pos;
       // spit out beginning beginning quote as a token, and leave the rest of the text for local mode parsing
       stream.backUp(tokenLength(stream) - 1);
@@ -94,7 +94,7 @@
     }
 
     function exitLocalModeWithEndQuote(stream) {
-      dbg('Exiting local html/css mode... (plain string)');
+      // ---dbg('Exiting local html/css mode... (plain string)');
       // parse the ending JS string quote,
       // cannot use the jsMode to parse, as it will be treated as the beginning of a string.
       // so we simulate it here.
@@ -108,7 +108,7 @@
         // backUp text beyond the string, plus one to exclude end quote
         stream.backUp(stream.pos - state.localState.localHtmlPlainStringEndPos + 1);
       }
-      dbg('  local mode token (plain string) - ', stream.current(), `[${style}]`);
+      // ---dbg('  local mode token (plain string) - ', stream.current(), `[${style}]`);
       return style;
     }
 
@@ -192,9 +192,9 @@
       const ctx = new RunContext(stream, state, jsTokenStyle);
       for (const r of rules) {
         if (r.curContext === (state.maybeLocalContext || '<start>')) {
-          // dbg('  rule:', r.curContext, r.match.toString());
+          // // ---dbg('  rule:', r.curContext, r.match.toString());
           const matched = r.run(ctx);
-          // dbg('  => rule output tokenStyle', ctx.style);
+          // // ---dbg('  => rule output tokenStyle', ctx.style);
           if (matched) {
             break;
           }
@@ -372,7 +372,7 @@
 
 
     function jsToken(stream, state) {
-      // dbg('jsToken -', `${stream.pos}: ${stream.string.substring(stream.pos).substring(0, 8)}`, state.lastType);
+      // // ---dbg('jsToken -', `${stream.pos}: ${stream.string.substring(stream.pos).substring(0, 8)}`, state.lastType);
 
       // adapt the existing jsmode tokenizer with the wrapper state
       let tokenStyle = null;
@@ -380,7 +380,7 @@
         // when in local html/css context, skip js parsing,
         // so as not to mess up js tokenizer's state.
         tokenStyle = jsMode.token(stream, state.jsState);
-        dbg('jsMode.token - ', state.maybeLocalContext, state.jsState.lastType, stream.current(), `[${tokenStyle}]`);
+        // ---dbg('jsMode.token - ', state.maybeLocalContext, state.jsState.lastType, stream.current(), `[${tokenStyle}]`);
         if (tokenStyle === null) { // case the token is not relevant semantically, e.g., space or line break;
           // just return,  skip local mode match,
           // as such token is not reflected in stream/state so the local mode matcher
@@ -427,15 +427,15 @@
       },
 
       token(stream, state) {
-        // dbg(`${stream.pos}: ${stream.string.substring(stream.pos).substring(0, 15)}`, state.lastType);
+        // // ---dbg(`${stream.pos}: ${stream.string.substring(stream.pos).substring(0, 15)}`, state.lastType);
         const tokenStyle = state.token(stream, state);
 
-        dbg('   <--', `[${tokenStyle}]`, stream.current());
+        // ---dbg('   <--', `[${tokenStyle}]`, stream.current());
         return tokenStyle;
       },
 
       indent(state, textAfter, line) {
-        dbg(`indent: "${textAfter}" "${line}"`);
+        // ---dbg(`indent: "${textAfter}" "${line}"`);
         if (!state.localMode) {
           return jsMode.indent(state.jsState, textAfter, line);
         }
