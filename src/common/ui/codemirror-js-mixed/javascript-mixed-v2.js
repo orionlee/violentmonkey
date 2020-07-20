@@ -2,6 +2,7 @@
 // Distributed under an MIT license
 
 /* eslint func-names: "off" */
+/* eslint-disable no-unused-vars */ // temporary in this branch
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     // eslint-disable-next-line global-require
@@ -53,7 +54,8 @@
       return stream.pos - stream.start;
     }
 
-    function prepReparseStringTemplateInLocalMode(modeToUse, stream, state, hasBeginBacktick = true) {
+    function prepReparseStringTemplateInLocalMode(modeToUse, stream, state,
+      hasBeginBacktick = true) {
       // ---dbg(`Entering local ${modeToUse.name} mode...`);
       if (hasBeginBacktick) {
         // spit out beginning backtick as a token, and leave the rest of the text for local mode parsing
@@ -338,7 +340,8 @@
         curContext: 'html-51',
         match: ctx => ctx.type === 'quasi' && RE_HTML_BASE.test(ctx.text), // second line starts with a tag
         nextContext: 'html-in',
-        caseMatched: ctx => prepReparseStringTemplateInLocalMode(htmlMode, ctx.stream, ctx.state, false),
+        caseMatched: ctx => prepReparseStringTemplateInLocalMode(htmlMode, ctx.stream, ctx.state,
+          false),
       }),
 
     ];

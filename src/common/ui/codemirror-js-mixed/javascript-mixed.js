@@ -2,6 +2,7 @@
 // Distributed under an MIT license
 
 /* eslint func-names: "off" */
+/* eslint-disable no-unused-vars */ // temporary in this branch
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     // eslint-disable-next-line global-require

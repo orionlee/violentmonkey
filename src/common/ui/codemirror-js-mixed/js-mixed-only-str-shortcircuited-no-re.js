@@ -3,6 +3,7 @@
 
 // Based on javascript-mixed, but only handles single/doubted html string
 /* eslint func-names: "off" */
+/* eslint-disable no-unused-vars */ // temporary in this branch
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     // eslint-disable-next-line global-require
