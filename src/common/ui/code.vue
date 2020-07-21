@@ -70,6 +70,10 @@ import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/javascript-hint';
 import 'codemirror/addon/hint/anyword-hint';
 import '#/common/ui/codemirror-js-mixed/javascript-mixed';
+import '#/common/ui/codemirror-js-mixed/javascript-mixed-v2'; // For performance branch only
+import '#/common/ui/codemirror-js-mixed/javascript-mixed-v3'; // For performance branch only
+import '#/common/ui/codemirror-js-mixed/js-mixed-v3-only-str'; // For performance branch only
+import '#/common/ui/codemirror-js-mixed/js-mixed-v3-only-js'; // For performance branch only
 import CodeMirror from 'codemirror';
 import Tooltip from 'vueleton/lib/tooltip/bundle';
 import ToggleButton from '#/common/ui/toggle-button';
@@ -119,7 +123,7 @@ export const cmOptions = {
   foldGutter: true,
   gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
   theme: 'eclipse',
-  mode: 'javascript-mixed',
+  mode: localStorage.cmMode ?? 'javascript-mixed-v3', // For performance branch only
   lineNumbers: true,
   matchBrackets: true,
   autoCloseBrackets: true,
