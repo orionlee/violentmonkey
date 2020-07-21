@@ -159,7 +159,6 @@
 
 
     function maybeTokenBase(stream, state, jsTokenStyle) {
-      let tokenStyle = STYLE_PASS;
       // TODO: might need to cache stream.current()
       if (state.jsState.lastType === 'string' && RE_HTML_PLAIN_STRING.test(stream.current())) {
         // rule html-plain-string
@@ -167,7 +166,7 @@
         prepReparsePlainStringInLocalMode(htmlNoMatchClosingMode, stream, state);
       }
       // else no match, n-op
-      return tokenStyle;
+      return STYLE_PASS;
     }
 
     function jsToken(stream, state) {
