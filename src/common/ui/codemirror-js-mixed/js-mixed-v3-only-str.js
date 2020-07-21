@@ -178,7 +178,7 @@
         // when in local html/css context, skip js parsing,
         // so as not to mess up js tokenizer's state.
         tokenStyle = jsMode.token(stream, state.jsState);
-        dbg('jsMode.token - ', state.maybeTokenize.name, state.jsState.lastType, stream.current(), `[${tokenStyle}]`);
+        // ---dbg('jsMode.token - ', state.maybeTokenize.name, state.jsState.lastType, stream.current(), `[${tokenStyle}]`);
         if (tokenStyle === null) { // case the token is not relevant semantically, e.g., space or line break;
           // just return,  skip local mode match,
           // as such token is not reflected in stream/state so the local mode matcher
