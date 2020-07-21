@@ -1,7 +1,7 @@
 import test from 'tape';
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/runmode/runmode-standalone';
-import '#/common/ui/codemirror-js-mixed/javascript-mixed';
+import '#/common/ui/codemirror-js-mixed/javascript-mixed-v3'; // For performance branch only
 import fs from 'fs';
 import path from 'path';
 
@@ -17,7 +17,7 @@ test('codemirror javascript-mixed regression', (t) => {
   const expected = fs.readFileSync(path.join(__dirname, 'code-tokens.txt'), 'utf8');
   let tokenRes = '';
   const EOF_HINT = '// EOF'; // used to signify the end of tokenization
-  CodeMirror.runMode(`${code}\n${EOF_HINT}`, 'javascript-mixed',
+  CodeMirror.runMode(`${code}\n${EOF_HINT}`, 'javascript-mixed-v3',
     (text, style) => {
       if (text !== EOF_HINT) {
         tokenRes += `${`${style} | ${text}`.trimRight()}\n`;
