@@ -69,6 +69,7 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/javascript-hint';
 import 'codemirror/addon/hint/anyword-hint';
+import 'codemirror/addon/runmode/runmode-standalone';
 import '#/common/ui/codemirror-js-mixed/javascript-mixed';
 import '#/common/ui/codemirror-js-mixed/javascript-mixed-v2'; // For performance branch only
 import '#/common/ui/codemirror-js-mixed/javascript-mixed-v3'; // For performance branch only
@@ -198,6 +199,59 @@ function replaceAll(cm, state) {
   });
 }
 
+async function doPerformanceTestForMode(mode, numRuns) {
+  const EOF_HINT = '// EOF';
+  const code = `${window._cm.getValue()}\n${EOF_HINT}`; // set in initialize() method
+
+  async function testOnce() {
+    const timeStart = Date.now();
+    let numTokens = 0;
+    return new Promise((resolve) => {
+      // eslint-disable-next-line no-unused-vars
+      CodeMirror.runMode(code, mode, (text, style) => {
+        numTokens += 1;
+        if (text === EOF_HINT) {
+          const timeElpased = Date.now() - timeStart;
+          resolve({ timeElpased, numTokens });
+        }
+      });
+    });
+  }
+
+  const res = {
+    timeElapsedMedian: null,
+    numTokens: null,
+    timeElapsedList: [],
+  };
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < numRuns; i++) {
+    const oneTestRes = await testOnce();
+    res.numTokens = oneTestRes.numTokens;
+    res.timeElapsedList.push(oneTestRes.timeElpased);
+  }
+
+  // eslint-disable-next-line no-nested-ternary
+  res.timeElapsedList.sort((a, b) => (a < b ? -1 : (a > b ? 1 : 0))); // easier to spot min/max
+  // median less sensitive to extreme values
+  res.timeElapsedMedian = res.timeElapsedList[Math.floor(res.timeElapsedList.length / 2)];
+
+  return res;
+}
+window.doPerformanceTestForMode = doPerformanceTestForMode;
+
+// can be invoked from devtools only
+function doProfileReload(mode) {
+  localStorage.cmMode = mode;
+  // hint to developers on how to end the profile
+  // eslint-disable-next-line no-console
+  console.log(`profileEnd('reload-${mode}');`);
+  // eslint-disable-next-line no-undef
+  profile(`reload-${mode}`);
+  // eslint-disable-next-line no-restricted-globals
+  location.reload();
+}
+window.doProfileReload = doProfileReload;
+
 export default {
   props: {
     active: Boolean,
@@ -302,6 +356,8 @@ export default {
       this.$emit('input', content);
     }, 200),
     initialize(cm) {
+      window._cm = cm;
+      window.CodeMirror = cm.constructor;
       this.cm = cm;
       cm.setOption('readOnly', this.readonly);
       // these are active only in the code nav tab
