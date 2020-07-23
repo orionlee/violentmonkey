@@ -75,6 +75,9 @@ import '#/common/ui/codemirror-js-mixed/javascript-mixed-v2'; // For performance
 import '#/common/ui/codemirror-js-mixed/javascript-mixed-v3'; // For performance branch only
 import '#/common/ui/codemirror-js-mixed/js-mixed-v3-only-str'; // For performance branch only
 import '#/common/ui/codemirror-js-mixed/js-mixed-v3-only-js'; // For performance branch only
+import '#/common/ui/codemirror-js-mixed/javascript-only'; // For performance branch only
+import '#/common/ui/codemirror-js-mixed/javascript-wrap-only'; // For performance branch only
+import '#/common/ui/codemirror-js-mixed/javascript-wrap-only-innermode-copystate'; // For performance branch only
 import CodeMirror from 'codemirror';
 import Tooltip from 'vueleton/lib/tooltip/bundle';
 import ToggleButton from '#/common/ui/toggle-button';
